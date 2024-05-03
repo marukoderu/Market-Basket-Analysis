@@ -4,7 +4,7 @@
 // Node untuk Trie
 typedef struct TrieNode {
     char name[50]; // Nama barang
-    int count; // Jumlah transaksi mengandung barang tersebut
+    bool endofCombination; // Ujung trie?
     struct TrieNode* children;
 } TrieNode;
 
