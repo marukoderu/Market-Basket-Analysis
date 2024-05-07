@@ -7,6 +7,7 @@ float calculateSupport(TrieNode *root, const char *itemName, int totalTransactio
     while (root != NULL){
         if (root->name == itemName){
             transactionsCount += 1;
+            
         }
 
     }
