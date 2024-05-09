@@ -85,7 +85,7 @@ int main() {
                 char *itemCombination[20];
                 int i = 0;
                 while (1){
-                    printf("Input nama item yang ingin dihitung supportnya: ");
+                    printf("Input nama item yang ingin dihitung: ");
                     scanf(" %s", namaItem);
                     if (strcmp(namaItem, "0") != 0 && i < 20) {
                         itemCombination[i] = (char*) malloc(strlen(namaItem) + 1);
@@ -96,9 +96,10 @@ int main() {
                     break;
                     }
                 }
-                calculateSupport(firstTransaction, itemCombination);
+                printf("Support: %.2f \n", calculateSupport(firstTransaction, itemCombination));
+                printf("Confidence: %.2f \n", calculateConfidence(firstTransaction, itemCombination));
                 system("pause");
-
+                break;
                 for (int j = 0; j < i; j++) {
                     free(itemCombination[j]);
                 }

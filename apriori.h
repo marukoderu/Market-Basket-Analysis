@@ -9,10 +9,9 @@
 // Kalo bisa satu function ini bisa hitung support buat >= 1 item
 float calculateSupport(transactionsNode* root, char *itemCombination[]);
 
-// Fungsi untuk menghitung support dari dua item
-// float calculateSupportTwoItems(TrieNode* root, const char* item1, const char* item2, int totalTransactions);
-
 // Fungsi untuk menghitung confidence
-// float calculateConfidence(TrieNode* root, const char* item1, const char* item2);
+float calculateConfidence(transactionsNode* root, char *itemCombination[]);
 
+// Mengambil jumlah item dalam kombinasi
+int countIteminCombination(char *itemCombination[]);
 #endif
