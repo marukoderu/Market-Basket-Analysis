@@ -1,6 +1,6 @@
 #ifndef APRIORI_H
 #define APRIORI_H
-#include "trie.h"
+// #include "trie.h"
 #include "linkedlist.h"
 #include "stdio.h" // NULL identifier
 
@@ -10,9 +10,9 @@
 float calculateSupport(transactionsNode* root, char *itemCombination[]);
 
 // Fungsi untuk menghitung support dari dua item
-float calculateSupportTwoItems(TrieNode* root, const char* item1, const char* item2, int totalTransactions);
+// float calculateSupportTwoItems(TrieNode* root, const char* item1, const char* item2, int totalTransactions);
 
 // Fungsi untuk menghitung confidence
-float calculateConfidence(TrieNode* root, const char* item1, const char* item2);
+// float calculateConfidence(TrieNode* root, const char* item1, const char* item2);
 
 #endif

@@ -28,7 +28,7 @@ int main() {
         printf("| Menu Option :\n");
         printf("| -------------------------------------------\n");
         printf("| 1 | Input Data Transaksi\n");
-        printf("| 2 | Lihat Isi Trie\n");
+        printf("| 2 | Lihat Data Transaksi (Trie)\n");
         printf("| 3 | Cari Data Transaksi\n");
         printf("| 4 | Lihat Data Transaksi \n");
         printf("| 5 | Hitung support untuk suatu item \n");
@@ -38,7 +38,6 @@ int main() {
 
         switch (option) {
             case 1:{
-
                 numItem = 1;
                 system("CLS");
                 menuHeader();
@@ -66,7 +65,11 @@ int main() {
                 break;
             }
             case 2:{
-                printTrie(root);
+                printf("Data Transaksi (Trie):\n");
+                printf("----------------------------------------------\n");
+                printTrieFormatted(root);
+                printf("----------------------------------------------\n");
+                system("pause");
                 break;
             }
             case 3:{
