@@ -69,6 +69,7 @@ void printItems(transactionsNode* transaction) {
     } else {
         printf("No items in this transaction.");
     }
+    printf("\n");
 }
 
 
@@ -92,3 +93,18 @@ itemsetNode *getLastItem(itemsetNode* firstItem){
     return getLastItem(firstItem->next);
 }
 
+// Print semua transaksi beserta dengan itemnya/
+void printAllTransactions(transactionsNode* firstTransaction) {
+    transactionsNode* currentTransaction = firstTransaction;
+
+    if (currentTransaction == NULL) {
+        printf("Tidak ada transaksi yang telah dilakukan. \n");
+        return;
+    }
+
+    while (currentTransaction != NULL) {
+        printItems(currentTransaction);
+        currentTransaction = currentTransaction->nextTransaction;
+    }
+    printf("\n");
+}
