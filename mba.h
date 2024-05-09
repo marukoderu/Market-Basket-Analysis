@@ -22,4 +22,7 @@ Trie *searchItem(Trie *root, const char *namaItem);
 // Mencetak isi Trie
 void printTrie(Trie *root);
 
+// Menambahkan Item ke Trie
+void addItemtoTrie(char namaItem[], Trie* *root);
+
 #endif

@@ -108,3 +108,15 @@ void printAllTransactions(transactionsNode* firstTransaction) {
     }
     printf("\n");
 }
+
+// Menyimpan data transaksi kedalam file
+void saveTransactions(transactionsNode* firstTransaction){
+    FILE *file = fopen("TransactionsData.dat", "a+");
+    if (file == NULL){
+        printf("File can't be opened. \n");
+    }
+    while (firstTransaction != NULL){
+        fwrite(firstTransaction, sizeof(transactionsNode), 1, file);
+    }
+    fclose(file);
+}

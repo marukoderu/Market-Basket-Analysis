@@ -43,4 +43,6 @@ transactionsNode* searchTransaction(int transactionID, transactionsNode* firstTr
 
 // Fungsi untuk mencetak semua transaksi dan barang-barangnya.
 void printAllTransactions(transactionsNode* firstTransaction);
+
+void saveTransactions(transactionsNode* firstTransaction);
 #endif /* LINKEDLIST_H */

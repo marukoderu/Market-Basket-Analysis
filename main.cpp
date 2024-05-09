@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "mba.h"
+#include "linkedlist.h"
 
 void menuHeader() {
     printf("| ===========================================\n");
@@ -13,6 +14,8 @@ void menuHeader() {
 int main() {
     // Trie Root Initialization
     Trie *root = createTrieNode("*");
+    itemsetNode* itemlist = NULL;
+    transactionsNode *firstTransaction = NULL, *lastTransaction = NULL;
 
     int option, numItem, transaction = 1;
     char namaItem[20];
@@ -24,59 +27,59 @@ int main() {
         printf("| Menu Option :\n");
         printf("| -------------------------------------------\n");
         printf("| 1 | Input Data Transaksi\n");
-        printf("| 2 | Lihat Data Transaksi\n");
+        printf("| 2 | Lihat Isi Trie\n");
         printf("| 3 | Cari Data Transaksi\n");
+        printf("| 4 | Lihat Data Transaksi \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
 
         switch (option) {
-            case 1:
+            case 1:{
+
+                numItem = 1;
                 system("CLS");
                 menuHeader();
                 printf("| -------------------------------------------\n");
 
                 // Proses input barang transaksi
-                printf("Ada berapa barang dalam transaksi ke-%d :", transaction);
-                scanf("%d", &numItem);
-
-                for (int i = 1; i <= numItem; i++) {
-                    printf("Masukkan nama barang ke-%d : ", i);
+                printf("Silahkan masukkan nama barang satu-persatu untuk transaksi ke-%d. \n", transaction);
+                printf("Masukkan 0 jika anda telah selesai. \n");
+                while (1){
+                    printf("Masukkan nama barang ke-%d: ", numItem);
                     scanf(" %s", namaItem);
-
-                    // Mencari parent yang sesuai untuk menempatkan barang baru
-                    Trie *parent = searchItem(root, namaItem);
-                    if (parent == NULL) {
-                        // Jika parent tidak ditemukan, barang baru menjadi anak pertama dari root
-                        addTransaction(root, namaItem);
+                    // Jika nama item = 0, maka sambungkan list item ke list transaksi.
+                    // Jika bukan, maka sambungkan item baru ke list item.
+                    if(strcmp(namaItem, "0") != 0){
+                        addItem(&itemlist, namaItem);
+                        addItemtoTrie(namaItem, &root);
+                        numItem++;
                     } else {
-                        // Jika parent ditemukan, cek apakah barang baru sudah ada sebagai anak
-                        Trie *child = parent->fc;
-                        bool found = false;
-                        while (child != NULL) {
-                            if (strcmp(child->namaItem, namaItem) == 0) {
-                                found = true;
-                                break;
-                            }
-                            child = child->nb;
-                        }
-                        // Jika barang belum ada, tambahkan sebagai anak terakhir dari parent
-                        if (!found) {
-                            addTransaction(parent, namaItem);
-                        }
+                        newTransaction(&firstTransaction, &lastTransaction, itemlist);
+                        itemlist = NULL; // Kosongkan list item.
+                        break;
                     }
                 }
                 transaction++;
                 break;
-            case 2:
+            }
+            case 2:{
                 printTrie(root);
                 break;
-            case 3:
+            }
+            case 3:{
                 printf("In Progress");
                 break;
-            default:
+            }
+            case 4:{
+                printAllTransactions(firstTransaction);
+                system("pause");
+                break;
+            }
+            default:{
                 printf("Tolong masukkan opsi menu yang valid! >.<\n");
                 break;
+            }
         }
 
     } while (option != 0);

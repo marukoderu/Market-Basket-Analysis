@@ -24,19 +24,14 @@ int main(){
                 char beliItem[20];
                 while (1)
                 {
-                    printf("Input barang yang ingin anda beli: ");
+                    printf("Input barang yang ingin anda beli (input 0 jika selesai.): ");
                     scanf("%s", beliItem);
-                    addItem(&itemlist, beliItem);
-                    // debug("Item = %s \n", itemlist->item);
-                    // debug("Item = %s \n", itemlist->next->item);
-                    printf("Sudah inputnya? Input 0 jika iya.");
-                    scanf("%d", &choice);
-                    if(choice == 0){
-                        newTransaction(&firstTransaction, &lastTransaction, itemlist);
-                        itemlist = NULL; // agar list kosong lagi karena yang sebelumnya sudah selesai.
-                        break;
+                    if(beliItem != "0"){
+                        addItem(&itemlist, beliItem);
                     }
-                }
+                    newTransaction(&firstTransaction, &lastTransaction, itemlist);
+                    itemlist = NULL; // agar list kosong lagi karena yang sebelumnya sudah selesai.
+                    }
                 break;
             }
             case 2:{
@@ -53,6 +48,10 @@ int main(){
             case 3:{
                 printAllTransactions(firstTransaction);
                 system("pause");
+                break;
+            }
+            case 4:{
+                saveTransactions(firstTransaction);
                 break;
             }
             case 0:{

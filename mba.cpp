@@ -108,3 +108,25 @@ void printTrie(Trie *root) {
     // Memanggil fungsi rekursif untuk mencetak isi Trie dimulai dari root
     printTrieRecursively(root, 0);
 }
+
+
+void addItemtoTrie(char namaItem[], Trie* *root){
+    Trie *parent = searchItem(*root, namaItem);
+    if (parent == NULL){
+        addTransaction(*root, namaItem);
+    } else {
+        Trie *child = parent->fc;
+        bool found = false;
+        while(child != NULL){
+            if(strcmp(child->namaItem, namaItem) == 0){
+                found = true;
+                break;
+            }
+            child = child->nb;
+
+            }
+        if(!found){
+            addTransaction(parent, namaItem);
+        }
+    }
+}
