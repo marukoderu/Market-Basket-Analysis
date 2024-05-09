@@ -9,22 +9,22 @@
 //              \/
 //  |ID|nextTransaction|transactionItem| --> ||
 // Node untuk Linked List Itemset
-typedef struct transactionsNode{
-    int ID;
-    transactionsNode *nextTransaction;
-    itemsetNode *transactionItem;
-} transactionsNode;
 
 typedef struct itemsetNode {
     char item[50]; // Nama barang dalam itemset
     struct itemsetNode* next; // Pointer ke node berikutnya dalam linked list
 } itemsetNode;
 
+typedef struct transactionsNode{
+    int ID;
+    transactionsNode *nextTransaction;
+    itemsetNode *transactionItem;
+} transactionsNode;
 // Fungsi untuk membuat node transaksi baru.
 transactionsNode* createTransactionsNode();
 
 // Fungsi untuk menambahkan transaksi baru.
-void newTransaction(transactionsNode* *firstTransaction, transactionsNode* *lastTransaction, itemsetNode* *items);
+void newTransaction(transactionsNode* *firstTransaction, transactionsNode* *lastTransaction, itemsetNode* items);
 
 // Fungsi untuk membuat node item baru.
 itemsetNode* createItemNode(const char* item);
@@ -32,11 +32,13 @@ itemsetNode* createItemNode(const char* item);
 // Fungsi untuk menambahkan item ke dalam satu transaksi.
 void addItem(itemsetNode* *itemlist, char item[]);
 
+// Fungsi untuk mendapatkan pointer ke item terakhir dalam list item.
+itemsetNode* getLastItem(itemsetNode* firstItem);
 
-// Fungsi untuk menambahkan node baru ke linked list itemset
-void addItemsetNode(itemsetNode** head, const char* item);
+// Fungsi untuk mencetak barang-barang dalam sebuah transaksi.
+void printItems(transactionsNode* transaction);
 
-// Fungsi untuk membersihkan linked list itemset
-void clearItemsetList(itemsetNode** head);
+// Fungsi untuk mencari sebuah transaksi by ID
+transactionsNode* searchTransaction(int transactionID, transactionsNode* firstTransaction);
 
 #endif /* LINKEDLIST_H */

@@ -19,7 +19,9 @@ void newTransaction(transactionsNode* *firstTransaction, transactionsNode* *last
     transactionsNode* newTransaction = createTransactionsNode();
     if ((*firstTransaction == NULL) && (*lastTransaction == NULL)){
         (*firstTransaction) = newTransaction; 
+        newTransaction->ID = 1;
     } else {
+        newTransaction->ID = (*lastTransaction)->ID + 1;
         (*lastTransaction)->nextTransaction = newTransaction;
     }
     *lastTransaction = newTransaction;
@@ -44,14 +46,49 @@ void addItem(itemsetNode* *itemList, char item[]){
     itemsetNode* newItem = createItemNode(item);
     itemsetNode* lastItem = *itemList;
 
-    if (itemList == NULL){
+    if (*itemList == NULL){
         *itemList = newItem;
     } else {
-        while (lastItem->next != NULL){
-            lastItem = lastItem->next;
-        }
+        lastItem = getLastItem(lastItem);
         (*lastItem).next = newItem;
     }
+}
+
+// Cetak List Item dalam sebuah transaksi
+// Mengambil pointer ke sebuah transaksi.
+void printItems(transactionsNode* transaction) {
+    printf("Items in Transaction #%d : ", transaction->ID);
     
+    // Check if transactionItem is not NULL before accessing its members
+    if (transaction->transactionItem != NULL) {
+        itemsetNode* currentItem = transaction->transactionItem;
+        while (currentItem != NULL) {
+            printf("%s ", currentItem->item);
+            currentItem = currentItem->next;
+        }
+    } else {
+        printf("No items in this transaction.");
+    }
+}
+
+
+
+// Search transaksi
+// Menerima ID sebuah transaksi (int), kemudian return pointer ke transaksi dengan ID tersebut.
+transactionsNode* searchTransaction(int transactionID, transactionsNode* firstTransaction) {
+    transactionsNode* searchedTransaction = firstTransaction;
+
+    while (searchedTransaction != NULL && searchedTransaction->ID != transactionID) {
+        searchedTransaction = searchedTransaction->nextTransaction;    
+    }
+    return searchedTransaction;
+}
+
+// Mengambil pointer item terakhir dalam sebuah list Item.
+itemsetNode *getLastItem(itemsetNode* firstItem){
+    if (firstItem->next == NULL){
+        return firstItem;
+    }
+    return getLastItem(firstItem->next);
 }
 
