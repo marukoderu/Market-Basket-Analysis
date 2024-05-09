@@ -79,10 +79,26 @@ int main() {
                 break;
             }
             case 5:{
-                printf("Input nama item yang ingin dihitung supportnya: ");
-                scanf(" %s", namaItem);
-                calculateSupport(firstTransaction, namaItem);
+                char *itemCombination[20];
+                int i = 0;
+                while (1){
+                    printf("Input nama item yang ingin dihitung supportnya: ");
+                    scanf(" %s", namaItem);
+                    if (strcmp(namaItem, "0") != 0 && i < 20) {
+                        itemCombination[i] = (char*) malloc(strlen(namaItem) + 1);
+                        strcpy(itemCombination[i], namaItem);
+                        i++;
+                    } else {
+                    itemCombination[i] = NULL;
+                    break;
+                    }
+                }
+                calculateSupport(firstTransaction, itemCombination);
                 system("pause");
+
+                for (int j = 0; j < i; j++) {
+                    free(itemCombination[j]);
+                }
                 break;
             }
             default:{

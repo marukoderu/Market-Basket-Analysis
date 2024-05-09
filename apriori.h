@@ -7,7 +7,7 @@
 // Fungsi untuk menghitung support dari satu item
 // Support = Transactions including item A / Total transactions
 // Kalo bisa satu function ini bisa hitung support buat >= 1 item
-float calculateSupport(transactionsNode* root, const char itemName[]);
+float calculateSupport(transactionsNode* root, char *itemCombination[]);
 
 // Fungsi untuk menghitung support dari dua item
 float calculateSupportTwoItems(TrieNode* root, const char* item1, const char* item2, int totalTransactions);
