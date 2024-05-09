@@ -44,5 +44,9 @@ transactionsNode* searchTransaction(int transactionID, transactionsNode* firstTr
 // Fungsi untuk mencetak semua transaksi dan barang-barangnya.
 void printAllTransactions(transactionsNode* firstTransaction);
 
+// Fungsi untuk mengambil pointer ke transaksi terakhir.
+transactionsNode *getLastTransaction(transactionsNode* firstTransaction);
+
+// Fungsi untuk menyimpan data transaksi ke dalam sebuah file.
 void saveTransactions(transactionsNode* firstTransaction);
 #endif /* LINKEDLIST_H */

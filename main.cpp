@@ -3,6 +3,7 @@
 #include <string.h>
 #include "mba.h"
 #include "linkedlist.h"
+#include "apriori.h"
 
 void menuHeader() {
     printf("| ===========================================\n");
@@ -30,6 +31,7 @@ int main() {
         printf("| 2 | Lihat Isi Trie\n");
         printf("| 3 | Cari Data Transaksi\n");
         printf("| 4 | Lihat Data Transaksi \n");
+        printf("| 5 | Hitung support untuk suatu item \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
@@ -73,6 +75,13 @@ int main() {
             }
             case 4:{
                 printAllTransactions(firstTransaction);
+                system("pause");
+                break;
+            }
+            case 5:{
+                printf("Input nama item yang ingin dihitung supportnya: ");
+                scanf(" %s", namaItem);
+                calculateSupport(firstTransaction, namaItem);
                 system("pause");
                 break;
             }

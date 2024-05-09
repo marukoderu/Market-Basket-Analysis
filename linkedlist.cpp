@@ -93,6 +93,14 @@ itemsetNode *getLastItem(itemsetNode* firstItem){
     return getLastItem(firstItem->next);
 }
 
+// Mengambil pointer transaksi terakhir dalam sebuah list transaksi.
+transactionsNode *getLastTransaction(transactionsNode* firstTransaction){
+    if(firstTransaction->nextTransaction == NULL){
+        return firstTransaction;
+    }
+    return getLastTransaction(firstTransaction->nextTransaction);
+}
+
 // Print semua transaksi beserta dengan itemnya/
 void printAllTransactions(transactionsNode* firstTransaction) {
     transactionsNode* currentTransaction = firstTransaction;
@@ -110,6 +118,8 @@ void printAllTransactions(transactionsNode* firstTransaction) {
 }
 
 // Menyimpan data transaksi kedalam file
+// !!!WIP!!!
+// To-Do: stop the loop.
 void saveTransactions(transactionsNode* firstTransaction){
     FILE *file = fopen("TransactionsData.dat", "a+");
     if (file == NULL){
