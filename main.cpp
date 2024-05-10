@@ -38,6 +38,7 @@ int main() {
 
         switch (option) {
             case 1:{
+
                 numItem = 1;
                 system("CLS");
                 menuHeader();
@@ -53,10 +54,10 @@ int main() {
                     // Jika bukan, maka sambungkan item baru ke list item.
                     if(strcmp(namaItem, "0") != 0){
                         addItem(&itemlist, namaItem);
-                        addItemtoTrie(namaItem, &root);
                         numItem++;
                     } else {
                         newTransaction(&firstTransaction, &lastTransaction, itemlist);
+                        addItemtoTrie(&root, itemlist);
                         itemlist = NULL; // Kosongkan list item.
                         break;
                     }

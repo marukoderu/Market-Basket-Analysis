@@ -13,20 +13,11 @@ typedef struct TrieNode {
 // Membuat Node Trie Baru
 Trie *createTrieNode(const char *namaItem);
 
-// Menambahkan transaksi ke Trie
-void addTransaction(Trie *root, const char *namaItem);
-
-// Fungsi untuk mendapatkan transaksi dari linked list dan membuat Trie
-void getTransaction(Trie *root, transactionsNode *firstTransaction);
-
 // Mencari node di Trie berdasarkan nama item
 Trie *searchItem(Trie *root, const char *namaItem);
 
-// Mencetak isi Trie
-// void printTrie(Trie *root);
-
 // Menambahkan item ke Trie
-void addItemtoTrie(char namaItem[], Trie **root);
+void addItemtoTrie(Trie **root, itemsetNode* items);
 
 // Fungsi rekursif untuk mencetak isi Trie dengan format tertentu
 void printTrieFormatted(Trie *node, int level);
