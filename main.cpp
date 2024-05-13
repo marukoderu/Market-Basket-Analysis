@@ -32,6 +32,7 @@ int main() {
         printf("| 3 | Cari Data Transaksi\n");
         printf("| 4 | Lihat Data Transaksi \n");
         printf("| 5 | Hitung support untuk suatu item \n");
+        printf("| 6 | Kombinasi Item dari Trie \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
@@ -49,7 +50,7 @@ int main() {
                 printf("Masukkan 0 jika anda telah selesai. \n");
                 while (1){
                     printf("Masukkan nama barang ke-%d: ", numItem);
-                    scanf(" %s", namaItem);
+                    scanf(" %[^\n]s", namaItem);
                     // Jika nama item = 0, maka sambungkan list item ke list transaksi.
                     // Jika bukan, maka sambungkan item baru ke list item.
                     if(strcmp(namaItem, "0") != 0){
@@ -66,6 +67,8 @@ int main() {
                 break;
             }
             case 2:{
+                system("CLS");
+                menuHeader();
                 printf("Data Transaksi (Trie):\n");
                 printf("----------------------------------------------\n");
                 printTrieFormatted(root);
@@ -78,11 +81,15 @@ int main() {
                 break;
             }
             case 4:{
+                system("CLS");
+                menuHeader();
                 printAllTransactions(firstTransaction);
                 system("pause");
                 break;
             }
             case 5:{
+                system("CLS");
+                menuHeader();
                 char *itemCombination[20];
                 int i = 0;
                 while (1){
@@ -104,6 +111,13 @@ int main() {
                 for (int j = 0; j < i; j++) {
                     free(itemCombination[j]);
                 }
+                break;
+            }
+            case 6:{
+                system("CLS");
+                menuHeader();
+                getItemCombination(root);
+                system("pause");
                 break;
             }
             default:{

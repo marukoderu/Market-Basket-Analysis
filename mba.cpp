@@ -16,7 +16,6 @@ Trie *createTrieNode(const char *namaItem) {
     newNode->fc = NULL;
     newNode->nb = NULL;
     newNode->pr = NULL;
-    newNode->terminal = false;
     return newNode;
 }
 
@@ -35,20 +34,34 @@ Trie *searchItem(Trie *root, const char *namaItem) {
     return NULL; // Jika tidak ditemukan, kembalikan NULL
 }
 
+// Menambahkan Itemsets ke bentuk Trie
+// 
 void addItemtoTrie(Trie **root, itemsetNode* items) {
+    // Penunjuk ROOT
     Trie *currentRoot = *root;
     while (items != NULL) {
+        // Penunjuk node fc dari root / parent
         Trie *currentNode = currentRoot->fc;
+        // Node sebelumnya
         Trie *previousNode = NULL;
+
+        // compare nama item dengan yang akan di tambahkan
+        // jika sama, maka jangan ditambahkan tapi ganti pointer ke node tersebut
         while (currentNode != NULL && strcmp(currentNode->namaItem, items->item) != 0) {
             previousNode = currentNode;
             currentNode = currentNode->nb;
         }
+
+        // jika currentNode nya NULL
+        // artinya item tersebut belum ada di Trie
         if (currentNode == NULL) {
+            // Buat Trie Node dari Itemset
             Trie *newNode = createTrieNode(items->item);
+            // Jika prev node masih NULL
+            // newNode akan menjadi fc dari root / parent
             if (previousNode == NULL) {
                 currentRoot->fc = newNode;
-            } else {
+            } else { 
                 previousNode->nb = newNode;
             }
             newNode->pr = currentRoot;
@@ -76,11 +89,6 @@ void printTrieFormatted(Trie *node, int level) {
 
     // Cetak nama item pada node saat ini
     printf("%s", node->namaItem);
-
-    // Jika node terminal, cetak tanda * sebagai penanda
-    if (node->terminal) {
-        printf(" *");
-    }
     printf("\n");
 
     // Rekursif untuk mencetak anak-anak dari node saat ini
@@ -95,4 +103,38 @@ void printTrieFormatted(Trie *root) {
     printf("* (ROOT)\n");
     // Memanggil fungsi rekursif untuk mencetak isi Trie dimulai dari root
     printTrieFormatted(root->fc, 1);
+}
+
+// Fungsi rekursif untuk mencetak semua kombinasi dari transaksi tertentu
+void printTransactionCombination(char *items[], int start, int length) {
+    for (int i = start; i < length; i++) {
+        for (int j = i + 1; j < length; j++) {
+            printf("%s, %s\n", items[i], items[j]);
+        }
+    }
+}
+
+// Fungsi rekursif untuk mengambil kombinasi item dari Trie
+void getItemCombinationRecursive(Trie *root, char *prefix, int prefixLength) {
+    if (prefixLength > 0) {
+        printf("%s", prefix);
+        printf("\n");
+    }
+
+    Trie *child = root->fc;
+    while (child != NULL) {
+        char newPrefix[50];
+        strcpy(newPrefix, prefix);
+        strcat(newPrefix, child->namaItem);
+        strcat(newPrefix, ", ");
+        getItemCombinationRecursive(child, newPrefix, prefixLength + 1);
+        child = child->nb;
+    }
+}
+
+// Fungsi untuk mengambil kombinasi item dari Trie
+void getItemCombination(Trie *root) {
+    if (root == NULL) return;
+    char prefix[50] = ""; // Buat string kosong untuk dijadikan prefix awal
+    getItemCombinationRecursive(root, prefix, 0);
 }

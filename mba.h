@@ -7,7 +7,6 @@
 typedef struct TrieNode {
     char namaItem[20];
     struct TrieNode *fc, *nb, *pr;
-    bool terminal;
 } Trie;
 
 // Membuat Node Trie Baru
@@ -24,5 +23,10 @@ void printTrieFormatted(Trie *node, int level);
 
 // Fungsi untuk mencetak Trie dalam format tertentu
 void printTrieFormatted(Trie *root);
+
+// Fungsi untuk mengambil kombinasi item dari Trie
+void getItemCombination(Trie *root);
+
+void printTransactionCombination(char *items[], int start, int length);
 
 #endif /* MBA_H */
