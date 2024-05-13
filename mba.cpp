@@ -105,7 +105,7 @@ void printTrieFormatted(Trie *root) {
     printTrieFormatted(root->fc, 1);
 }
 
-// Fungsi rekursif untuk mencetak semua kombinasi dari transaksi tertentu
+// Fungsi untuk mencetak semua kombinasi dari transaksi tertentu
 void printTransactionCombination(char *items[], int start, int length) {
     for (int i = start; i < length; i++) {
         for (int j = i + 1; j < length; j++) {
@@ -114,27 +114,55 @@ void printTransactionCombination(char *items[], int start, int length) {
     }
 }
 
-// Fungsi rekursif untuk mengambil kombinasi item dari Trie
-void getItemCombinationRecursive(Trie *root, char *prefix, int prefixLength) {
-    if (prefixLength > 0) {
-        printf("%s", prefix);
-        printf("\n");
+// Fungsi rekursif untuk mengambil semua kombinasi item dari Trie
+void getItemCombinationRecursive(Trie *root, char **currentCombination, int index, int length) {
+    if (root == NULL) return;
+
+    // Panggil rekursi dengan mengabaikan item saat ini
+    getItemCombinationRecursive(root->nb, currentCombination, index, length);
+
+    // Tambahkan item saat ini ke dalam kombinasi
+    currentCombination[index] = root->namaItem;
+    index++;
+
+    // Jika kita mencapai node yang merupakan bagian terakhir dari transaksi,
+    // cetak semua kombinasi yang mungkin
+    if (root->fc == NULL) {
+        printTransactionCombination(currentCombination, 0, index);
+    } else {
+        // Panggil rekursi untuk anak-anak node saat ini
+        Trie *child = root->fc;
+        while (child != NULL) {
+            getItemCombinationRecursive(child, currentCombination, index, length);
+            child = child->nb;
+        }
     }
 
-    Trie *child = root->fc;
-    while (child != NULL) {
-        char newPrefix[50];
-        strcpy(newPrefix, prefix);
-        strcat(newPrefix, child->namaItem);
-        strcat(newPrefix, ", ");
-        getItemCombinationRecursive(child, newPrefix, prefixLength + 1);
-        child = child->nb;
-    }
+    // Kembalikan nilai indeks ke posisi semula setelah selesai memproses anak-anak
+    index--;
+    currentCombination[index] = NULL;
 }
 
 // Fungsi untuk mengambil kombinasi item dari Trie
 void getItemCombination(Trie *root) {
     if (root == NULL) return;
-    char prefix[50] = ""; // Buat string kosong untuk dijadikan prefix awal
-    getItemCombinationRecursive(root, prefix, 0);
+
+    // Hitung panjang transaksi dan alokasikan array kombinasi
+    int length = 0;
+    Trie *node = root->fc;
+    while (node != NULL) {
+        length++;
+        node = node->nb;
+    }
+    char **currentCombination = (char **)malloc(length * sizeof(char *));
+    if (currentCombination == NULL) {
+        printf("Maaf! Alokasi memori gagal :(");
+        exit(1);
+    }
+
+    // Panggil fungsi rekursif untuk mendapatkan kombinasi
+    getItemCombinationRecursive(root, currentCombination, 0, length);
+
+    // Bebaskan memori setelah selesai
+    free(currentCombination);
 }
