@@ -64,6 +64,7 @@ int main() {
                     }
                 }
                 transaction++;
+                system("pause");
                 break;
             }
             case 2:{
@@ -105,6 +106,7 @@ int main() {
                     }
                 }
                 printf("Support: %.2f \n", calculateSupport(firstTransaction, itemCombination));
+                printf("------ \n");
                 printf("Confidence: %.2f \n", calculateConfidence(firstTransaction, itemCombination));
                 system("pause");
                 break;

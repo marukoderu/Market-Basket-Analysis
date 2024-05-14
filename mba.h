@@ -6,6 +6,8 @@
 // Trie Data Structure
 typedef struct TrieNode {
     char namaItem[20];
+    int count;
+    bool eoi; // End of Item
     struct TrieNode *fc, *nb, *pr;
 } Trie;
 
