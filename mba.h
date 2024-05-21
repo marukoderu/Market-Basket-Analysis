@@ -28,9 +28,6 @@ void printTrieFormatted(Trie *root);
 // Fungsi untuk mengambil kombinasi item dari Trie
 void getItemCombination(Trie *root);
 
-// Count Support
-// float countSupportByTrie(Trie *root);
-
 void printTransactionCombination(char *items[], int start, int length);
 
 #endif /* MBA_H */

@@ -142,6 +142,22 @@ void getItemCombination(Trie *root) {
     getItemCombinationRecursive(root, prefix, 0);
 }
 
+// void updateTrie(Trie *root, transactionsNode *transactionNode, float support){
+//     if (transactionNode == NULL){
+//         printf("Tidak ada transaksi.");
+//         return;
+//     }
+
+//     while (transactionNode != NULL){
+//         while ()
+//         {
+//             /* code */
+//         }
+        
+//         transactionNode = transactionNode->nextTransaction;
+//     }
+// }
+
 // float countSupportByTrie(Trie *root) {
 //     TrieNode *currentNode = root;
 //     if (currentNode == NULL) {

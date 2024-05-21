@@ -46,6 +46,15 @@ void addItem(itemsetNode* *itemList, char item[]){
     itemsetNode* newItem = createItemNode(item);
     itemsetNode* lastItem = *itemList;
 
+    while (lastItem != NULL){
+        if (strcmp(lastItem->item, item) == 0){
+            return;
+        }
+        lastItem = lastItem->next;
+    }
+    
+    lastItem = *itemList;
+
     if (*itemList == NULL){
         *itemList = newItem;
     } else {
@@ -130,3 +139,16 @@ void saveTransactions(transactionsNode* firstTransaction){
     }
     fclose(file);
 }
+
+// void generateItemList(itemList *root, itemsetNode *items){
+//     if (root == NULL){
+//         *root 
+//         strcpy(root->item, items->item);
+//         items = items->next;
+//     }
+//     while (items != NULL){
+//         if (strcmp(root->item, items->item)){
+//             items = items->next;
+//         }
+//     }
+// }
