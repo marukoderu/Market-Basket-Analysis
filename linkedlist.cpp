@@ -52,7 +52,7 @@ void addItem(itemsetNode* *itemList, char item[]){
         }
         lastItem = lastItem->next;
     }
-    
+
     lastItem = *itemList;
 
     if (*itemList == NULL){
@@ -140,15 +140,68 @@ void saveTransactions(transactionsNode* firstTransaction){
     fclose(file);
 }
 
-// void generateItemList(itemList *root, itemsetNode *items){
-//     if (root == NULL){
-//         *root 
-//         strcpy(root->item, items->item);
-//         items = items->next;
-//     }
-//     while (items != NULL){
-//         if (strcmp(root->item, items->item)){
-//             items = items->next;
-//         }
-//     }
-// }
+// Buat node untuk item
+// Menerima string item
+// next = NULL
+itemsetNode* createItemList(char item[]){
+    itemsetNode* newItem = (itemsetNode*) malloc(sizeof(itemsetNode));
+    strcpy(newItem->item, item);
+    newItem->next = NULL;
+    return newItem;
+}
+
+itemsetNode* searchIteminList(itemsetNode *root, char item[]){
+    itemsetNode* itemAddress = root;
+
+    while (itemAddress != NULL && strcmp(itemAddress->item, item) != 0) {
+        itemAddress = itemAddress->next;    
+    }
+    return itemAddress;
+}
+
+void generateItemList(itemsetNode **root, itemsetNode *items) {
+    if (items == NULL) {
+        return;
+    }
+
+    itemsetNode* currentItem;
+    
+    // Initialize root if it's NULL
+    if (*root == NULL) {
+        *root = createItemList(items->item);
+        currentItem = *root;
+        items = items->next;
+    } else {
+        currentItem = *root;
+        while (currentItem->next != NULL) {
+            currentItem = currentItem->next;
+        }
+    }
+
+    while (items != NULL) {
+        if (searchIteminList(*root, items->item) == NULL) {
+            currentItem->next = createItemList(items->item);
+            currentItem = currentItem->next;
+        }
+        items = items->next;
+    }
+
+    printf("gen item list \n");
+}
+
+
+void printItemList(itemsetNode* root){
+    printf("printitemlist \n");
+    // printf("item: %s", root->item);
+    // Check if transactionItem is not NULL before accessing its members
+    if (root != NULL) {
+        itemsetNode* currentItem = root;
+        while (currentItem != NULL) {
+            printf("%s ", currentItem->item);
+            currentItem = currentItem->next;
+        }
+    } else {
+        printf("No items in this transaction.");
+    }
+    printf("\n");
+}

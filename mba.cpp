@@ -142,6 +142,20 @@ void getItemCombination(Trie *root) {
     getItemCombinationRecursive(root, prefix, 0);
 }
 
+// hitung support untuk tiap item
+// untuk item yang supportnya > usersupport
+    // masukkan ke trie
+// hitung support untuk kombinasi item yang sudah ada dalam trie
+    // masuk ke trie
+
+// while (items != NULL){
+//     calculatesupport(items->item)
+//     untuk item yang supportnya > threshold 
+//         -> createlistitem
+
+//     addItemtoTrie(root, )
+//     items = items->next
+// }
 // void updateTrie(Trie *root, transactionsNode *transactionNode, float support){
 //     if (transactionNode == NULL){
 //         printf("Tidak ada transaksi.");

@@ -17,6 +17,7 @@ int main() {
     Trie *root = createTrieNode("*");
     itemsetNode* itemlist = NULL;
     transactionsNode *firstTransaction = NULL, *lastTransaction = NULL;
+    itemsetNode* listofItem = NULL;
 
     int option, numItem, transaction = 1;
     char namaItem[20];
@@ -58,6 +59,8 @@ int main() {
                         numItem++;
                     } else {
                         newTransaction(&firstTransaction, &lastTransaction, itemlist);
+                        generateItemList(&listofItem, itemlist);
+                        printItemList(listofItem);
                         addItemtoTrie(&root, itemlist);
                         itemlist = NULL; // Kosongkan list item.
                         break;

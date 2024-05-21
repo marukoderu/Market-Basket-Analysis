@@ -20,6 +20,13 @@ typedef struct transactionsNode{
     transactionsNode *nextTransaction;
     itemsetNode *transactionItem;
 } transactionsNode;
+
+
+// Fungsi untuk membuat list item dengan supportnya
+void generateItemList(itemsetNode **root, itemsetNode *items);
+
+void printItemList(itemsetNode* root);
+
 // Fungsi untuk membuat node transaksi baru.
 transactionsNode* createTransactionsNode();
 
