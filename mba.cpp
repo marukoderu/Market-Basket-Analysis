@@ -3,6 +3,7 @@
 #include <string.h>
 #include "mba.h"
 #include "linkedlist.h"
+#include "apriori.h"
 
 // Membuat Node Trie Baru
 Trie *createTrieNode(const char *namaItem) {
@@ -156,29 +157,42 @@ void getItemCombination(Trie *root) {
 //     addItemtoTrie(root, )
 //     items = items->next
 // }
-// void updateTrie(Trie *root, transactionsNode *transactionNode, float support){
-//     if (transactionNode == NULL){
-//         printf("Tidak ada transaksi.");
-//         return;
-//     }
-
-//     while (transactionNode != NULL){
-//         while ()
-//         {
-//             /* code */
-//         }
-        
-//         transactionNode = transactionNode->nextTransaction;
-//     }
-// }
-
-// float countSupportByTrie(Trie *root) {
-//     TrieNode *currentNode = root;
-//     if (currentNode == NULL) {
-//         printf("Maaf, tidak ada data transaksi!\n");
-//         return;
-//     }
-
-//     // Trie Traversal
+void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support) {
+    itemsetNode *currentItem = uniqueItems;
+    char *itemArray[2]; // Array to hold single item and null terminator
     
-// }
+    while (currentItem != NULL) {
+        itemArray[0] = currentItem->item;
+        itemArray[1] = NULL;
+
+        if (compareSupport(transactions, support, itemArray)) {
+            float itemSupport = calculateSupport(transactions, itemArray);
+            addSingleItemtoTrie(root, currentItem->item, itemSupport);
+            printf("added %s to trie \n", currentItem->item);
+        }
+        printf("Current item: %s\n", currentItem->item);
+        currentItem = currentItem->next;
+    }
+    printf("Break loop\n");
+}
+
+void addSingleItemtoTrie(Trie **parent, char item[], float support) {
+    Trie *newNode, *currentNode;
+
+    // Create new Trie node
+    newNode = createTrieNode(item);
+    newNode->support = support;
+
+    if ((*parent)->fc == NULL) {
+        // If the first child of the parent is NULL, set it to newNode
+        (*parent)->fc = newNode;
+    } else {
+        // Traverse the sibling list to find the last sibling
+        currentNode = (*parent)->fc;
+        while (currentNode->nb != NULL) {
+            currentNode = currentNode->nb;            
+        }
+        // Add newNode as the next sibling
+        currentNode->nb = newNode;
+    }
+}

@@ -205,3 +205,13 @@ void printItemList(itemsetNode* root){
     }
     printf("\n");
 }
+
+void listtoArray(itemsetNode *list, char *array[]){
+    int i = 0;
+    while (list != NULL){
+        strcpy(array[i], list->item);
+        list = list->next;
+        i++;
+    }
+    array[i] = NULL;
+}

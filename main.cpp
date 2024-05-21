@@ -34,6 +34,7 @@ int main() {
         printf("| 4 | Lihat Data Transaksi \n");
         printf("| 5 | Hitung support untuk suatu item \n");
         printf("| 6 | Kombinasi Item dari Trie \n");
+        printf("| 7 | Generate first level trie \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
@@ -61,7 +62,7 @@ int main() {
                         newTransaction(&firstTransaction, &lastTransaction, itemlist);
                         generateItemList(&listofItem, itemlist);
                         printItemList(listofItem);
-                        addItemtoTrie(&root, itemlist);
+                        // addItemtoTrie(&root, itemlist);
                         itemlist = NULL; // Kosongkan list item.
                         break;
                     }
@@ -123,6 +124,15 @@ int main() {
                 menuHeader();
                 getItemCombination(root);
                 system("pause");
+                break;
+            }
+            case 7:{
+                system("CLS");
+                float support;
+                printf("Input support threshold: \n");
+                scanf("%d", &support);
+                support = support / 10;
+                generateFirstLevelItems(&root, listofItem, firstTransaction, support);
                 break;
             }
             case 0:{

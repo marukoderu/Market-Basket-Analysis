@@ -14,4 +14,6 @@ float calculateConfidence(transactionsNode* root, char *itemCombination[]);
 
 // Mengambil jumlah item dalam kombinasi
 int countIteminCombination(char *itemCombination[]);
+
+bool compareSupport(transactionsNode *root, float supportThreshold, char *items[]);
 #endif

@@ -2,6 +2,7 @@
 #include "linkedlist.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Support = Transactions including item A / Total transactions
 float calculateSupport(transactionsNode *root, char *itemCombination[]) {
@@ -48,7 +49,7 @@ float calculateSupport(transactionsNode *root, char *itemCombination[]) {
         printf("%s ", itemCombination[i]);
         i++;
     }
-    printf("is %f \n", support);
+    printf("is %.1f \n", support);
 
     return support;
 }
@@ -103,4 +104,12 @@ int countIteminCombination(char *itemCombination[]){
     }
 
     return count;
+}
+
+bool compareSupport(transactionsNode *root, float supportThreshold, char *items[]){
+    bool passedThreshold = false;
+    if (calculateSupport(root, items) >= supportThreshold){
+        passedThreshold = true;
+    }
+    return passedThreshold;
 }
