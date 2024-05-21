@@ -13,8 +13,7 @@ Trie *createTrieNode(const char *namaItem) {
     }
 
     strcpy(newNode->namaItem, namaItem);
-    newNode->count = 0;
-    newNode->eoi = 0;
+    newNode->support = 0;
     newNode->fc = NULL;
     newNode->nb = NULL;
     newNode->pr = NULL;
@@ -55,17 +54,6 @@ void addItemtoTrie(Trie **root, itemsetNode* items) {
             currentNode = currentNode->nb;
         }
 
-        printf(">>> currentNode : %s \n", currentNode->namaItem);
-        printf(">>> items : %s \n", items->item);
-
-        if (currentNode != NULL) {
-            currentNode->count += 1;
-
-            if (items->next == NULL) {
-                currentNode->eoi = 1;
-            }
-        }
-
         // jika currentNode nya NULL
         // artinya item tersebut belum ada di Trie
         if (currentNode == NULL) {
@@ -75,14 +63,8 @@ void addItemtoTrie(Trie **root, itemsetNode* items) {
             // newNode akan menjadi fc dari root / parent
             if (previousNode == NULL) {
                 currentRoot->fc = newNode;
-                newNode->count += 1;
             } else { 
                 previousNode->nb = newNode;
-                newNode->count += 1;
-            }
-
-            if (items->next == NULL) {
-                newNode->eoi = 1;
             }
 
             newNode->pr = currentRoot;
@@ -95,8 +77,6 @@ void addItemtoTrie(Trie **root, itemsetNode* items) {
 
 // Fungsi rekursif untuk mencetak isi Trie dengan format tertentu
 void printTrieFormatted(Trie *node, int level) {
-    int currentLevel = level;
-
     if (node == NULL) {
         return;
     }
@@ -111,7 +91,7 @@ void printTrieFormatted(Trie *node, int level) {
     }
 
     // Cetak nama item pada node saat ini
-    printf(" %s | count: %d | eoi: %d ", node->namaItem, node->count, node->eoi);
+    printf(" %s ", node->namaItem);
     printf("\n");
 
     // Rekursif untuk mencetak anak-anak dari node saat ini
@@ -161,3 +141,14 @@ void getItemCombination(Trie *root) {
     char prefix[50] = ""; // Buat string kosong untuk dijadikan prefix awal
     getItemCombinationRecursive(root, prefix, 0);
 }
+
+// float countSupportByTrie(Trie *root) {
+//     TrieNode *currentNode = root;
+//     if (currentNode == NULL) {
+//         printf("Maaf, tidak ada data transaksi!\n");
+//         return;
+//     }
+
+//     // Trie Traversal
+    
+// }

@@ -122,9 +122,13 @@ int main() {
                 system("pause");
                 break;
             }
-            default:{
-                printf("Tolong masukkan opsi menu yang valid! >.<\n");
+            case 0:{
+                printf("Terima kasih....");
                 break;
+            }
+            default:{
+                system("CLS");
+                printf("Tolong masukkan opsi menu yang valid! >.<\n");
             }
         }
 

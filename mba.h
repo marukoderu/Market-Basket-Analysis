@@ -6,8 +6,7 @@
 // Trie Data Structure
 typedef struct TrieNode {
     char namaItem[20];
-    int count;
-    bool eoi; // End of Item
+    float support;
     struct TrieNode *fc, *nb, *pr;
 } Trie;
 
@@ -28,6 +27,9 @@ void printTrieFormatted(Trie *root);
 
 // Fungsi untuk mengambil kombinasi item dari Trie
 void getItemCombination(Trie *root);
+
+// Count Support
+// float countSupportByTrie(Trie *root);
 
 void printTransactionCombination(char *items[], int start, int length);
 
