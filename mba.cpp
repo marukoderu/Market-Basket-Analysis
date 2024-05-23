@@ -157,23 +157,37 @@ void getItemCombination(Trie *root) {
 //     addItemtoTrie(root, )
 //     items = items->next
 // }
+
+// Function to generate the first level items in the Trie
 void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support) {
     itemsetNode *currentItem = uniqueItems;
-    char *itemArray[2]; // Array to hold single item and null terminator
-    
+    char *itemArray[2];  // Array to hold single item and null terminator
+
+    // Iterate through all unique items
     while (currentItem != NULL) {
         itemArray[0] = currentItem->item;
-        itemArray[1] = NULL;
+        itemArray[1] = NULL;  // Null terminator for the array
+        printf("Adding %s to trie \n", itemArray[0]);
 
-        if (compareSupport(transactions, support, itemArray)) {
-            float itemSupport = calculateSupport(transactions, itemArray);
-            addSingleItemtoTrie(root, currentItem->item, itemSupport);
-            printf("added %s to trie \n", currentItem->item);
+        // Check if the item passes the support threshold
+        bool isItemPassedSupportThreshold = compareSupport(transactions, support, itemArray);
+
+        // debug
+        printf("Support for %s is %f \n", itemArray[0], calculateSupport(transactions, itemArray));
+        if (isItemPassedSupportThreshold) {
+            printf("%s with the support of %f passed the support threshold of %f \n", itemArray[0], calculateSupport(transactions, itemArray), support);
+        } else {
+            printf("%s with the support of %f didnt pass the support threshold of %f \n", itemArray[0], calculateSupport(transactions, itemArray), support);
         }
-        printf("Current item: %s\n", currentItem->item);
-        currentItem = currentItem->next;
+
+        if (isItemPassedSupportThreshold) {
+            float itemSupport = calculateSupport(transactions, itemArray);  // Calculate support for the item
+            addSingleItemtoTrie(root, currentItem->item, itemSupport);  // Add item to the Trie
+            printf("Added %s to trie \n", currentItem->item);  // Log addition to the Trie
+        }
+        printf("Current item: %s\n", currentItem->item);  // Log current item being processed
+        currentItem = currentItem->next;  // Move to the next item
     }
-    printf("Break loop\n");
 }
 
 void addSingleItemtoTrie(Trie **parent, char item[], float support) {
@@ -195,4 +209,11 @@ void addSingleItemtoTrie(Trie **parent, char item[], float support) {
         // Add newNode as the next sibling
         currentNode->nb = newNode;
     }
+    newNode->pr = *parent;
 }
+
+// void freeTree(Trie *root){
+//     if (root == NULL) return;
+
+//     freeTree(root->)
+// }

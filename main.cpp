@@ -130,8 +130,9 @@ int main() {
                 system("CLS");
                 float support;
                 printf("Input support threshold: \n");
-                scanf("%d", &support);
-                support = support / 10;
+                scanf("%f", &support);  // Use %f to read a float value
+                support = support / 10; // Divide by 10 if needed
+                printf("Support threshold after division: %f\n", support);  // Print the support threshold
                 generateFirstLevelItems(&root, listofItem, firstTransaction, support);
                 break;
             }

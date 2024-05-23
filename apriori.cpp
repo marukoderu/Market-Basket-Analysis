@@ -106,10 +106,15 @@ int countIteminCombination(char *itemCombination[]){
     return count;
 }
 
-bool compareSupport(transactionsNode *root, float supportThreshold, char *items[]){
-    bool passedThreshold = false;
-    if (calculateSupport(root, items) >= supportThreshold){
-        passedThreshold = true;
+// Function to compare the support of items with the threshold
+bool compareSupport(transactionsNode *root, float supportThreshold, char *items[]) {
+    // Calculate the support for the given items
+    float support = calculateSupport(root, items);
+
+    // Check if the calculated support meets or exceeds the threshold
+    if (support >= supportThreshold) {
+        return true;  // Support is above or equal to the threshold
+    } else {
+        return false; // Support is below the threshold
     }
-    return passedThreshold;
 }
