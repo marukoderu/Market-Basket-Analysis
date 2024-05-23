@@ -23,7 +23,7 @@ Trie *createTrieNode(const char *namaItem) {
 
 // Mencari node di Trie berdasarkan nama item
 Trie *searchItem(Trie *root, const char *namaItem) {
-    Trie *pT = root;
+    Trie *pT = root->fc;
 
     // Traverse Trie untuk mencari nama item
     while (pT != NULL) {
@@ -167,6 +167,9 @@ void printAllItemCombination(Trie *root) {
     char *itemCombination[20]; // Assuming a maximum of 20 item combinations
     Trie *currentNode = root->fc;
     Trie *firstNode, *secondNode;
+
+    
+
     while (currentNode != NULL) {
         firstNode = currentNode;
         secondNode = firstNode->nb;
@@ -177,7 +180,9 @@ void printAllItemCombination(Trie *root) {
             getItemComb(firstNode, secondNode, itemCombination);
 
             for (int i = 0; itemCombination[i] != NULL; i++){
-                printf("%s ", itemCombination[i]);
+                if (strcmp(itemCombination[i], itemCombination[i-1])!=0){
+                    printf("%s ", itemCombination[i]);
+                }
             }
             printf("\n");
             secondNode = secondNode->nb;
@@ -226,7 +231,7 @@ void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactions
         }
 
         if (isItemPassedSupportThreshold) {
-            addSingleItemtoTrie(root, currentItem->item, itemSupport);  // Add item to the Trie
+            addSingleItemtoTrie(*root, currentItem->item, itemSupport);  // Add item to the Trie
             printf("Added %s to trie \n", currentItem->item);  // Log addition to the Trie
         }
         printf("Current item: %s\n", currentItem->item);  // Log current item being processed
@@ -234,32 +239,96 @@ void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactions
     }
 }
 
-void addSingleItemtoTrie(Trie **parent, char item[], float support) {
+void addSingleItemtoTrie(Trie *parent, char item[], float support) {
     Trie *newNode, *currentNode;
 
     // Create new Trie node
     newNode = createTrieNode(item);
+    if (newNode == NULL) {
+        // Handle memory allocation failure
+        printf("Error: Memory allocation failed\n");
+        return;
+    }
     newNode->support = support;
-
-    if ((*parent)->fc == NULL) {
-        // If the first child of the parent is NULL, set it to newNode
-        (*parent)->fc = newNode;
+    printf("anak %s = %s\n", parent->namaItem, parent->fc->namaItem);
+    // Check if the parent has no children
+    if (strcmp(parent->namaItem, newNode->namaItem)==0){
+        free(newNode);
+        return;
+    }
+    if (parent->fc == NULL) {
+        parent->fc = newNode; // Set newNode as the first child of the parent
+        printf("Berhasil menambahkan %s sebagai fc %s\n", parent->fc->namaItem, parent->namaItem);
     } else {
-        // Traverse the sibling list to find the last sibling
-        currentNode = (*parent)->fc;
-        while (currentNode->nb != NULL) {
-            currentNode = currentNode->nb;            
+        // Traverse the sibling list to check for duplicates and find the last sibling
+        printf("%s sudah beranak \n", parent->namaItem);
+        currentNode = parent->fc;
+        printf("Sedang membandingkan %s dengan %s \n", currentNode->namaItem, item);
+        while ((currentNode->nb != NULL) && (strcmp(currentNode->namaItem, newNode->namaItem) != 0)) {
+            printf("pindah ke nb dari %s \n", currentNode->namaItem);
+            currentNode = currentNode->nb; // Move to the next sibling
         }
         // Add newNode as the next sibling
+        if ((strcmp(currentNode->namaItem, newNode->namaItem) == 0)){
+            printf("%s sama dengan %s \n", currentNode->namaItem, newNode->namaItem);
+            free(newNode);
+            return;
+        }
         currentNode->nb = newNode;
     }
-    newNode->pr = *parent;
+    newNode->pr = parent; // Set parent node for newNode
 }
 
+
 void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support){
+    Trie *currentNode, *firstNode, *secondNode;
+    char *itemCombination[20];
+
     deallocateTrie(*root);
     (*root) = createTrieNode("*");
     generateFirstLevelItems(root, uniqueItems, transactions, support);
+    
+    currentNode = (*root)->fc;
+     while (currentNode != NULL) {
+        firstNode = currentNode;
+        secondNode = firstNode->nb;
+
+        while (secondNode != NULL){
+            getItemComb(firstNode, secondNode, itemCombination);
+            printf("ItemCombination: ");
+            for (int i = 0; itemCombination[i]!= NULL; i++){
+                printf("%s ", itemCombination[i]);
+            }
+            printf("\n");
+            
+            bool isPassedSupportThreshold = compareSupport(transactions, support, itemCombination);
+            float itemSupport = calculateSupport(transactions, itemCombination);
+
+            printf("Support is %f \n", itemSupport);
+            if (isPassedSupportThreshold) {
+                printf("itemcombination with the support of %f passed the support threshold of %f \n", itemSupport, support);
+            } else {
+                printf("itemcombination with the support of %f didnt pass the support threshold of %f \n", itemSupport, support);
+            }
+
+            if (isPassedSupportThreshold) {
+                Trie *parent = searchItem(*root, itemCombination[0]);
+                for (int i = 0; itemCombination[i] != NULL; i++) {
+                    if (parent->fc != NULL){
+                    parent = parent->fc;
+                    }
+                    if (itemCombination[i+1] != NULL) {
+                        // Add the next item to the Trie under the current parent
+                        addSingleItemtoTrie(parent, itemCombination[i+1], itemSupport);
+                    }
+                }
+            }
+
+            secondNode = secondNode->nb;
+        }
+
+        currentNode = currentNode->nb;
+    }
 }
 
 void deallocateTrie(Trie* root) {

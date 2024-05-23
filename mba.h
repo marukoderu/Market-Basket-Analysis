@@ -32,7 +32,7 @@ void printTransactionCombination(char *items[], int start, int length);
 
 void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactionsNode, float support);
 
-void addSingleItemtoTrie(Trie **parent, char item[], float support);
+void addSingleItemtoTrie(Trie *parent, char item[], float support);
 
 void deallocateTrie(Trie* root);
 
@@ -41,4 +41,6 @@ void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transac
 void printAllItemCombination(Trie *root);
 
 void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]);
+
+void emptyArray(char *array[]);
 #endif /* MBA_H */
