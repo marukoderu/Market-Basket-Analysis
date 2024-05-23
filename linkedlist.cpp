@@ -185,13 +185,10 @@ void generateItemList(itemsetNode **root, itemsetNode *items) {
         }
         items = items->next;
     }
-
-    printf("gen item list \n");
 }
 
 
 void printItemList(itemsetNode* root){
-    printf("printitemlist \n");
     // printf("item: %s", root->item);
     // Check if transactionItem is not NULL before accessing its members
     if (root != NULL) {

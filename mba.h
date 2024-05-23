@@ -6,7 +6,6 @@
 // Trie Data Structure
 typedef struct TrieNode {
     char namaItem[20];
-    float support;
     struct TrieNode *fc, *nb, *pr;
 } Trie;
 

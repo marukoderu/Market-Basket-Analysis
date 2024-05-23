@@ -14,7 +14,6 @@ Trie *createTrieNode(const char *namaItem) {
     }
 
     strcpy(newNode->namaItem, namaItem);
-    newNode->support = 0;
     newNode->fc = NULL;
     newNode->nb = NULL;
     newNode->pr = NULL;
@@ -143,6 +142,7 @@ void getItemCombination(Trie *root) {
     getItemCombinationRecursive(root, prefix, 0);
 }
 
+// Fungsi untuk mengambil kombinasi item dari Trie
 void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]) {
     if ((firstItem == NULL) || (secondItem == NULL)) return;
 
@@ -163,6 +163,7 @@ void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]) {
     itemCombination[i] = NULL;
 }
 
+// Fungsi untuk print semua kombinasi item dari Trie
 void printAllItemCombination(Trie *root) {
     char *itemCombination[20]; // Assuming a maximum of 20 item combinations
     Trie *currentNode = root->fc;
@@ -190,21 +191,6 @@ void printAllItemCombination(Trie *root) {
     }
 }
 
-// hitung support untuk tiap item
-// untuk item yang supportnya > usersupport
-    // masukkan ke trie
-// hitung support untuk kombinasi item yang sudah ada dalam trie
-    // masuk ke trie
-
-// while (items != NULL){
-//     calculatesupport(items->item)
-//     untuk item yang supportnya > threshold 
-//         -> createlistitem
-
-//     addItemtoTrie(root, )
-//     items = items->next
-// }
-
 // Function to generate the first level items in the Trie
 void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support) {
     itemsetNode *currentItem = uniqueItems;
@@ -214,29 +200,19 @@ void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactions
     while (currentItem != NULL) {
         itemArray[0] = currentItem->item;
         itemArray[1] = NULL;  // Null terminator for the array
-        printf("Adding %s to trie \n", itemArray[0]);
 
         // Check if the item passes the support threshold
         bool isItemPassedSupportThreshold = compareSupport(transactions, support, itemArray);
         float itemSupport = calculateSupport(transactions, itemArray);  // Calculate support for the item
 
-        // debug
-        printf("Support for %s is %f \n", itemArray[0], itemSupport);
-        if (isItemPassedSupportThreshold) {
-            printf("%s with the support of %f passed the support threshold of %f \n", itemArray[0], itemSupport, support);
-        } else {
-            printf("%s with the support of %f didnt pass the support threshold of %f \n", itemArray[0], itemSupport, support);
-        }
-
         if (isItemPassedSupportThreshold) {
             addSingleItemtoTrie(*root, currentItem->item, itemSupport);  // Add item to the Trie
-            printf("Added %s to trie \n", currentItem->item);  // Log addition to the Trie
         }
-        printf("Current item: %s\n", currentItem->item);  // Log current item being processed
         currentItem = currentItem->next;  // Move to the next item
     }
 }
 
+// Fungsi untuk menambahkan sebuah item ke Trie
 void addSingleItemtoTrie(Trie *parent, char item[], float support) {
     Trie *newNode, *currentNode;
 
@@ -247,28 +223,24 @@ void addSingleItemtoTrie(Trie *parent, char item[], float support) {
         printf("Error: Memory allocation failed\n");
         return;
     }
-    newNode->support = support;
-    printf("anak %s = %s\n", parent->namaItem, parent->fc->namaItem);
-    // Check if the parent has no children
+
+    // Check if the parent is the same as newNode
     if (strcmp(parent->namaItem, newNode->namaItem)==0){
         free(newNode);
         return;
     }
+
+    // Check if the parent has no children
     if (parent->fc == NULL) {
         parent->fc = newNode; // Set newNode as the first child of the parent
-        printf("Berhasil menambahkan %s sebagai fc %s\n", parent->fc->namaItem, parent->namaItem);
     } else {
         // Traverse the sibling list to check for duplicates and find the last sibling
-        printf("%s sudah beranak \n", parent->namaItem);
         currentNode = parent->fc;
-        printf("Sedang membandingkan %s dengan %s \n", currentNode->namaItem, item);
         while ((currentNode->nb != NULL) && (strcmp(currentNode->namaItem, newNode->namaItem) != 0)) {
-            printf("pindah ke nb dari %s \n", currentNode->namaItem);
             currentNode = currentNode->nb; // Move to the next sibling
         }
         // Add newNode as the next sibling
         if ((strcmp(currentNode->namaItem, newNode->namaItem) == 0)){
-            printf("%s sama dengan %s \n", currentNode->namaItem, newNode->namaItem);
             free(newNode);
             return;
         }
@@ -277,7 +249,7 @@ void addSingleItemtoTrie(Trie *parent, char item[], float support) {
     newNode->pr = parent; // Set parent node for newNode
 }
 
-
+// Fungsi untuk update Trie sesuai dengan item yang memiliki nilai support yang melebihi threshold
 void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support){
     Trie *currentNode, *firstNode, *secondNode;
     char *itemCombination[20];
@@ -293,21 +265,9 @@ void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transac
 
         while (secondNode != NULL){
             getItemComb(firstNode, secondNode, itemCombination);
-            printf("ItemCombination: ");
-            for (int i = 0; itemCombination[i]!= NULL; i++){
-                printf("%s ", itemCombination[i]);
-            }
-            printf("\n");
             
             bool isPassedSupportThreshold = compareSupport(transactions, support, itemCombination);
             float itemSupport = calculateSupport(transactions, itemCombination);
-
-            printf("Support is %f \n", itemSupport);
-            if (isPassedSupportThreshold) {
-                printf("itemcombination with the support of %f passed the support threshold of %f \n", itemSupport, support);
-            } else {
-                printf("itemcombination with the support of %f didnt pass the support threshold of %f \n", itemSupport, support);
-            }
 
             if (isPassedSupportThreshold) {
                 Trie *parent = searchItem(*root, itemCombination[0]);
@@ -356,12 +316,8 @@ void generateAssociationRules(Trie *root, transactionsNode *transactions, float 
     printf("Association Rules:\n");
     while (currentBranch != NULL) {
         currentNode = currentBranch;
-        printf("Current Branch: %p\n", currentBranch);
-        printf("Current Branch Item: %s\n", currentBranch->namaItem);
         i = 0;
         while (currentNode != NULL) {
-            printf("Current Node: %p\n", currentNode);
-            printf("Current Item: %s\n", currentNode->namaItem);
 
             // Allocate memory for itemCombination[i]
             itemCombination[i] = (char*) malloc(strlen(currentNode->namaItem) + 1);
@@ -376,29 +332,16 @@ void generateAssociationRules(Trie *root, transactionsNode *transactions, float 
             i++;
             currentNode = currentNode->fc;
 
-            // Debugging print for itemCombination
-            printf("ItemCombination: ");
-            for (int j = 0; j < i; j++) {
-                if (itemCombination[j] != NULL) {
-                    printf("%s ", itemCombination[j]);
-                } else {
-                    printf("NULL ");
-                }
-            }
-            printf("\n");
             itemCombination[i] = NULL;
         }
 
         // Check if the combination passes the confidence threshold
-        printf("comparing confidence.. \n");
         isPassedConfidenceThreshold = compareConfidence(transactions, confidence, itemCombination);
-        printf("Current Confidence: %f, Confidence Threshold: %f\n", calculateConfidence(transactions, itemCombination), confidence);
 
         if (isPassedConfidenceThreshold) {
             // Print the combination as an association rule
             for (int j = 0; j < i; j++) {
-                associatedItems[k] = (char *) malloc(strlen(itemCombination[j])+1);
-                strcpy(associatedItems[k++],itemCombination[j]);
+                printf("%s ", itemCombination[j]);
             }
             printf("\n");
         }
@@ -410,13 +353,6 @@ void generateAssociationRules(Trie *root, transactionsNode *transactions, float 
         }
 
         currentBranch = currentBranch->nb;
-        printf("Next Branch: %p\n", currentBranch);
-    }
-    associatedItems[k] = NULL;
-    for (k = 0; associatedItems[k]!=NULL; k++){
-        if (associatedItems[k]!= NULL){
-            printf("%s ", associatedItems[k]);
-        }
     }
     printf("\n");
 }

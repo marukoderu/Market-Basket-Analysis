@@ -34,7 +34,8 @@ int main() {
         printf("| 4 | Lihat Data Transaksi \n");
         printf("| 5 | Hitung support untuk suatu item \n");
         printf("| 6 | Kombinasi Item dari Trie \n");
-        printf("| 7 | Generate first level trie \n");
+        printf("| 7 | Update Trie \n");
+        printf("| 8 | Generate Association Rules \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
@@ -61,7 +62,7 @@ int main() {
                     } else {
                         newTransaction(&firstTransaction, &lastTransaction, itemlist);
                         generateItemList(&listofItem, itemlist);
-                        printItemList(listofItem);
+                        // printItemList(listofItem);
                         // addItemtoTrie(&root, itemlist);
                         itemlist = NULL; // Kosongkan list item.
                         break;

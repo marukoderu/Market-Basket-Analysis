@@ -43,13 +43,13 @@ float calculateSupport(transactionsNode *root, char *itemCombination[]) {
 
     support = (float)itemCount / transactionsCount;
 
-    printf("support for ");
-    int i = 0;
-    while (itemCombination[i] != NULL) {
-        printf("%s ", itemCombination[i]);
-        i++;
-    }
-    printf("is %.1f \n", support);
+    // printf("support for ");
+    // int i = 0;
+    // while (itemCombination[i] != NULL) {
+    //     printf("%s ", itemCombination[i]);
+    //     i++;
+    // }
+    // printf("is %.1f \n", support);
 
     return support;
 }
