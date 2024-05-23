@@ -168,8 +168,6 @@ void printAllItemCombination(Trie *root) {
     Trie *currentNode = root->fc;
     Trie *firstNode, *secondNode;
 
-    
-
     while (currentNode != NULL) {
         firstNode = currentNode;
         secondNode = firstNode->nb;
@@ -346,3 +344,80 @@ void deallocateTrie(Trie* root) {
     root->pr = NULL;
     free(root);
 }
+
+void generateAssociationRules(Trie *root, transactionsNode *transactions, float confidence) {
+    Trie *currentBranch = root->fc;
+    Trie *currentNode;
+    char *itemCombination[10];
+    char *associatedItems[20];
+    int i = 0, k = 0;
+    bool isPassedConfidenceThreshold;
+
+    printf("Association Rules:\n");
+    while (currentBranch != NULL) {
+        currentNode = currentBranch;
+        printf("Current Branch: %p\n", currentBranch);
+        printf("Current Branch Item: %s\n", currentBranch->namaItem);
+        i = 0;
+        while (currentNode != NULL) {
+            printf("Current Node: %p\n", currentNode);
+            printf("Current Item: %s\n", currentNode->namaItem);
+
+            // Allocate memory for itemCombination[i]
+            itemCombination[i] = (char*) malloc(strlen(currentNode->namaItem) + 1);
+            if (itemCombination[i] == NULL) {
+                printf("Memory allocation failed\n");
+                // Exit or handle the allocation failure
+                exit(1);
+            }
+
+            // Copy currentNode->namaItem to itemCombination[i]
+            strcpy(itemCombination[i], currentNode->namaItem);
+            i++;
+            currentNode = currentNode->fc;
+
+            // Debugging print for itemCombination
+            printf("ItemCombination: ");
+            for (int j = 0; j < i; j++) {
+                if (itemCombination[j] != NULL) {
+                    printf("%s ", itemCombination[j]);
+                } else {
+                    printf("NULL ");
+                }
+            }
+            printf("\n");
+            itemCombination[i] = NULL;
+        }
+
+        // Check if the combination passes the confidence threshold
+        printf("comparing confidence.. \n");
+        isPassedConfidenceThreshold = compareConfidence(transactions, confidence, itemCombination);
+        printf("Current Confidence: %f, Confidence Threshold: %f\n", calculateConfidence(transactions, itemCombination), confidence);
+
+        if (isPassedConfidenceThreshold) {
+            // Print the combination as an association rule
+            for (int j = 0; j < i; j++) {
+                associatedItems[k] = (char *) malloc(strlen(itemCombination[j])+1);
+                strcpy(associatedItems[k++],itemCombination[j]);
+            }
+            printf("\n");
+        }
+
+        // Free memory allocated for itemCombination
+        for (int j = 0; j < i; j++) {
+            free(itemCombination[j]);
+            itemCombination[j] = NULL; // Reset pointer to NULL
+        }
+
+        currentBranch = currentBranch->nb;
+        printf("Next Branch: %p\n", currentBranch);
+    }
+    associatedItems[k] = NULL;
+    for (k = 0; associatedItems[k]!=NULL; k++){
+        if (associatedItems[k]!= NULL){
+            printf("%s ", associatedItems[k]);
+        }
+    }
+    printf("\n");
+}
+

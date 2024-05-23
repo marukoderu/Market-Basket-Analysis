@@ -43,4 +43,6 @@ void printAllItemCombination(Trie *root);
 void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]);
 
 void emptyArray(char *array[]);
+
+void generateAssociationRules(Trie *root, transactionsNode *transactions, float confidence);
 #endif /* MBA_H */

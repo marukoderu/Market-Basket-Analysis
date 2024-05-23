@@ -118,3 +118,13 @@ bool compareSupport(transactionsNode *root, float supportThreshold, char *items[
         return false; // Support is below the threshold
     }
 }
+
+bool compareConfidence(transactionsNode *root, float confidenceThreshold, char *items[]){
+    float confidence = calculateConfidence(root, items);
+
+    if (confidence >= confidenceThreshold){
+        return true;
+    } else {
+        return false;
+    }
+}

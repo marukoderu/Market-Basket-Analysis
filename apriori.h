@@ -16,4 +16,6 @@ float calculateConfidence(transactionsNode* root, char *itemCombination[]);
 int countIteminCombination(char *itemCombination[]);
 
 bool compareSupport(transactionsNode *root, float supportThreshold, char *items[]);
+
+bool compareConfidence(transactionsNode *root, float confidenceThreshold, char *items[]);
 #endif

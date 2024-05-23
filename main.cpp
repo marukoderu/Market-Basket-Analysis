@@ -137,6 +137,16 @@ int main() {
                 updateTrie(&root, listofItem, firstTransaction, support);
                 break;
             }
+            case 8:{
+                system("CLS");
+                float confidence;
+                printf("Input confidence threshold: ");
+                scanf("%f", &confidence);
+                confidence = confidence / 10;
+                printf("Confidence is %.1f \n", confidence);
+                generateAssociationRules(root, firstTransaction, confidence);
+                system("pause");
+            }
             case 0:{
                 printf("Terima kasih....");
                 break;
