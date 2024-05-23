@@ -122,7 +122,8 @@ int main() {
             case 6:{
                 system("CLS");
                 menuHeader();
-                getItemCombination(root);
+                // getItemCombination(root);
+                printAllItemCombination(root);
                 system("pause");
                 break;
             }

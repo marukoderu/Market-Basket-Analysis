@@ -37,4 +37,8 @@ void addSingleItemtoTrie(Trie **parent, char item[], float support);
 void deallocateTrie(Trie* root);
 
 void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support);
+
+void printAllItemCombination(Trie *root);
+
+void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]);
 #endif /* MBA_H */

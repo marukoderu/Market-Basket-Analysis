@@ -143,6 +143,50 @@ void getItemCombination(Trie *root) {
     getItemCombinationRecursive(root, prefix, 0);
 }
 
+void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]) {
+    if ((firstItem == NULL) || (secondItem == NULL)) return;
+
+    int i = 0;
+
+    while (firstItem != NULL) {
+        itemCombination[i] = (char*) malloc(strlen(firstItem->namaItem) + 1);
+        strcpy(itemCombination[i++], firstItem->namaItem);
+        firstItem = firstItem->fc;
+    }
+    
+
+    if (secondItem != NULL) {
+        itemCombination[i] = (char*) malloc(strlen(secondItem->namaItem) + 1);
+        strcpy(itemCombination[i++], secondItem->namaItem);
+    }
+    
+    itemCombination[i] = NULL;
+}
+
+void printAllItemCombination(Trie *root) {
+    char *itemCombination[20]; // Assuming a maximum of 20 item combinations
+    Trie *currentNode = root->fc;
+    Trie *firstNode, *secondNode;
+    while (currentNode != NULL) {
+        firstNode = currentNode;
+        secondNode = firstNode->nb;
+        
+        printf("%s \n", firstNode->namaItem);
+
+        while (secondNode != NULL){
+            getItemComb(firstNode, secondNode, itemCombination);
+
+            for (int i = 0; itemCombination[i] != NULL; i++){
+                printf("%s ", itemCombination[i]);
+            }
+            printf("\n");
+            secondNode = secondNode->nb;
+        }
+
+        currentNode = currentNode->nb;
+    }
+}
+
 // hitung support untuk tiap item
 // untuk item yang supportnya > usersupport
     // masukkan ke trie
