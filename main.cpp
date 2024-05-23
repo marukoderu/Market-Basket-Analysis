@@ -133,7 +133,7 @@ int main() {
                 scanf("%f", &support);  // Use %f to read a float value
                 support = support / 10; // Divide by 10 if needed
                 printf("Support threshold after division: %f\n", support);  // Print the support threshold
-                generateFirstLevelItems(&root, listofItem, firstTransaction, support);
+                updateTrie(&root, listofItem, firstTransaction, support);
                 break;
             }
             case 0:{

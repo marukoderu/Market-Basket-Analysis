@@ -171,17 +171,17 @@ void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactions
 
         // Check if the item passes the support threshold
         bool isItemPassedSupportThreshold = compareSupport(transactions, support, itemArray);
+        float itemSupport = calculateSupport(transactions, itemArray);  // Calculate support for the item
 
         // debug
-        printf("Support for %s is %f \n", itemArray[0], calculateSupport(transactions, itemArray));
+        printf("Support for %s is %f \n", itemArray[0], itemSupport);
         if (isItemPassedSupportThreshold) {
-            printf("%s with the support of %f passed the support threshold of %f \n", itemArray[0], calculateSupport(transactions, itemArray), support);
+            printf("%s with the support of %f passed the support threshold of %f \n", itemArray[0], itemSupport, support);
         } else {
-            printf("%s with the support of %f didnt pass the support threshold of %f \n", itemArray[0], calculateSupport(transactions, itemArray), support);
+            printf("%s with the support of %f didnt pass the support threshold of %f \n", itemArray[0], itemSupport, support);
         }
 
         if (isItemPassedSupportThreshold) {
-            float itemSupport = calculateSupport(transactions, itemArray);  // Calculate support for the item
             addSingleItemtoTrie(root, currentItem->item, itemSupport);  // Add item to the Trie
             printf("Added %s to trie \n", currentItem->item);  // Log addition to the Trie
         }
@@ -212,8 +212,24 @@ void addSingleItemtoTrie(Trie **parent, char item[], float support) {
     newNode->pr = *parent;
 }
 
-// void freeTree(Trie *root){
-//     if (root == NULL) return;
+void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support){
+    deallocateTrie(*root);
+    (*root) = createTrieNode("*");
+    generateFirstLevelItems(root, uniqueItems, transactions, support);
+}
 
-//     freeTree(root->)
-// }
+void deallocateTrie(Trie* root) {
+    if (root == NULL) return;
+
+    // Recursively deallocate the first child
+    deallocateTrie(root->fc);
+
+    // Recursively deallocate the next brother
+    deallocateTrie(root->nb);
+
+    // Deallocate the current node
+    root->fc = NULL;
+    root->nb = NULL;
+    root->pr = NULL;
+    free(root);
+}
