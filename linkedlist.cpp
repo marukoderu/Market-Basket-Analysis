@@ -126,30 +126,8 @@ void printAllTransactions(transactionsNode* firstTransaction) {
     printf("\n");
 }
 
-// Menyimpan data transaksi kedalam file
-// !!!WIP!!!
-// To-Do: stop the loop.
-void saveTransactions(transactionsNode* firstTransaction){
-    FILE *file = fopen("TransactionsData.dat", "a+");
-    if (file == NULL){
-        printf("File can't be opened. \n");
-    }
-    while (firstTransaction != NULL){
-        fwrite(firstTransaction, sizeof(transactionsNode), 1, file);
-    }
-    fclose(file);
-}
-
-// Buat node untuk item
-// Menerima string item
-// next = NULL
-itemsetNode* createItemList(char item[]){
-    itemsetNode* newItem = (itemsetNode*) malloc(sizeof(itemsetNode));
-    strcpy(newItem->item, item);
-    newItem->next = NULL;
-    return newItem;
-}
-
+// Fungsi untuk mencari alamat sebuah item dalam list
+// menerima pointer ke root list dan nama item yang dicari
 itemsetNode* searchIteminList(itemsetNode *root, char item[]){
     itemsetNode* itemAddress = root;
 
@@ -159,6 +137,8 @@ itemsetNode* searchIteminList(itemsetNode *root, char item[]){
     return itemAddress;
 }
 
+// Fungsi untuk generate list item unique
+// menerima pointer ke root list dan pointer ke list item.
 void generateItemList(itemsetNode **root, itemsetNode *items) {
     if (items == NULL) {
         return;
@@ -168,7 +148,7 @@ void generateItemList(itemsetNode **root, itemsetNode *items) {
     
     // Initialize root if it's NULL
     if (*root == NULL) {
-        *root = createItemList(items->item);
+        *root = createItemNode(items->item);
         currentItem = *root;
         items = items->next;
     } else {
@@ -180,14 +160,14 @@ void generateItemList(itemsetNode **root, itemsetNode *items) {
 
     while (items != NULL) {
         if (searchIteminList(*root, items->item) == NULL) {
-            currentItem->next = createItemList(items->item);
+            currentItem->next = createItemNode(items->item);
             currentItem = currentItem->next;
         }
         items = items->next;
     }
 }
 
-
+// Fungsi untuk mencetak item dalam list item unique
 void printItemList(itemsetNode* root){
     // printf("item: %s", root->item);
     // Check if transactionItem is not NULL before accessing its members
@@ -201,14 +181,4 @@ void printItemList(itemsetNode* root){
         printf("No items in this transaction.");
     }
     printf("\n");
-}
-
-void listtoArray(itemsetNode *list, char *array[]){
-    int i = 0;
-    while (list != NULL){
-        strcpy(array[i], list->item);
-        list = list->next;
-        i++;
-    }
-    array[i] = NULL;
 }

@@ -108,14 +108,14 @@ void printTrieFormatted(Trie *root) {
     printTrieFormatted(root->fc, 1);
 }
 
-// Fungsi rekursif untuk mencetak semua kombinasi dari transaksi tertentu
-void printTransactionCombination(char *items[], int start, int length) {
-    for (int i = start; i < length; i++) {
-        for (int j = i + 1; j < length; j++) {
-            printf("%s, %s\n", items[i], items[j]);
-        }
-    }
-}
+// // Fungsi rekursif untuk mencetak semua kombinasi dari transaksi tertentu
+// void printTransactionCombination(char *items[], int start, int length) {
+//     for (int i = start; i < length; i++) {
+//         for (int j = i + 1; j < length; j++) {
+//             printf("%s, %s\n", items[i], items[j]);
+//         }
+//     }
+// }
 
 // Fungsi rekursif untuk mengambil kombinasi item dari Trie
 void getItemCombinationRecursive(Trie *root, char *prefix, int prefixLength) {

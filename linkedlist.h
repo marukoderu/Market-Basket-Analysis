@@ -57,5 +57,4 @@ transactionsNode *getLastTransaction(transactionsNode* firstTransaction);
 // Fungsi untuk menyimpan data transaksi ke dalam sebuah file.
 void saveTransactions(transactionsNode* firstTransaction);
 
-void listtoArray(itemsetNode *list, char *array[]);
 #endif /* LINKEDLIST_H */
