@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "mba.h"
 #include "linkedlist.h"
 #include "apriori.h"
@@ -18,21 +19,6 @@ Trie *createTrieNode(const char *namaItem) {
     newNode->nb = NULL;
     newNode->pr = NULL;
     return newNode;
-}
-
-// Mencari node di Trie berdasarkan nama item
-Trie *searchItem(Trie *root, const char *namaItem) {
-    Trie *pT = root->fc;
-
-    // Traverse Trie untuk mencari nama item
-    while (pT != NULL) {
-        if (strcmp(pT->namaItem, namaItem) == 0) {
-            return pT; // Jika ditemukan, kembalikan node saat ini
-        }
-        pT = pT->nb; // Lanjut ke sibling berikutnya
-    }
-
-    return NULL; // Jika tidak ditemukan, kembalikan NULL
 }
 
 // Menambahkan Itemsets ke bentuk Trie
@@ -357,3 +343,46 @@ void generateAssociationRules(Trie *root, transactionsNode *transactions, float 
     printf("\n");
 }
 
+// Function to trim leading and trailing spaces from a string
+void trim(char *str) {
+    // Trim leading spaces
+    char *start = str;
+    while (*start && isspace(*start)) {
+        start++;
+    }
+
+    // Trim trailing spaces
+    char *end = str + strlen(str) - 1;
+    while (end > start && isspace(*end)) {
+        end--;
+    }
+    *(end + 1) = '\0'; // Terminate the string at the last non-space character
+}
+
+// Existing function to search for a single item in the Trie
+Trie *searchItem(Trie *root, const char *namaItem) {
+    Trie *pT = root->fc;
+
+    // Traverse Trie to search for the item name
+    while (pT != NULL) {
+        if (strcmp(pT->namaItem, namaItem) == 0) {
+            return pT; // If found, return the current node
+        }
+        pT = pT->nb; // Move to the next sibling
+    }
+
+    return NULL; // If not found, return NULL
+}
+
+// Function to search multiple items in the Trie and print the results
+void searchItemsInTrie(Trie *root, char *items[], int itemCount) {
+    for (int i = 0; i < itemCount; i++) {
+        trim(items[i]); // Trim leading and trailing spaces from each item
+        Trie *foundItem = searchItem(root, items[i]);
+        if (foundItem != NULL) {
+            printf("Found it: %s\n", items[i]);
+        } else {
+            printf("Sorry, we can't find it: %s\n", items[i]);
+        }
+    }
+}

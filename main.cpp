@@ -83,7 +83,33 @@ int main() {
                 break;
             }
             case 3:{
-                printf("In Progress");
+                system("CLS");
+                menuHeader();
+                printf("| -------------------------------------------\n");
+                printf("Cari Data Transaksi:\n");
+                printf("----------------------------------------------\n");
+                char input[256];
+                char *items[20];
+                int itemCount = 0;
+
+                printf("Enter items to search (comma separated): ");
+                scanf(" %[^\n]", input);
+
+                char *token = strtok(input, ", ");
+                while (token != NULL) {
+                    items[itemCount] = (char *)malloc(strlen(token) + 1);
+                    strcpy(items[itemCount], token);
+                    itemCount++;
+                    token = strtok(NULL, ", ");
+                }
+                items[itemCount] = NULL;
+
+                searchItemsInTrie(root, items, itemCount);
+
+                for (int i = 0; i < itemCount; i++) {
+                    free(items[i]);
+                }
+                system("pause");
                 break;
             }
             case 4:{
