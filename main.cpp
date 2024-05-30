@@ -21,6 +21,7 @@ int main() {
 
     int option, numItem, transaction = 1;
     char namaItem[20];
+    float support = 0.5;
 
     do {
         // Menu Option
@@ -32,9 +33,9 @@ int main() {
         printf("| 2 | Lihat Data Transaksi (Trie)\n");
         printf("| 3 | Cari Data Transaksi\n");
         printf("| 4 | Lihat Data Transaksi \n");
-        printf("| 5 | Hitung support untuk suatu item \n");
+        printf("| 5 | Update Nilai Support \n");
         printf("| 6 | Kombinasi Item dari Trie \n");
-        printf("| 7 | Update Trie \n");
+        printf("| 7 | Update Trie (redundant) \n");
         printf("| 8 | Generate Association Rules \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
@@ -43,7 +44,7 @@ int main() {
         switch (option) {
             case 1:{
 
-                numItem = 1;
+                numItem = 1;~
                 system("CLS");
                 menuHeader();
                 printf("| -------------------------------------------\n");
@@ -68,6 +69,7 @@ int main() {
                         break;
                     }
                 }
+                updateTrie(&root, listofItem, firstTransaction, support);
                 transaction++;
                 system("pause");
                 break;
@@ -122,50 +124,46 @@ int main() {
             case 5:{
                 system("CLS");
                 menuHeader();
-                char *itemCombination[20];
-                int i = 0;
-                while (1){
-                    printf("Input nama item yang ingin dihitung: ");
-                    scanf(" %s", namaItem);
-                    if (strcmp(namaItem, "0") != 0 && i < 20) {
-                        itemCombination[i] = (char*) malloc(strlen(namaItem) + 1);
-                        strcpy(itemCombination[i], namaItem);
-                        i++;
-                    } else {
-                    itemCombination[i] = NULL;
-                    break;
-                    }
+                printf("| -------------------------------------------\n");
+                printf("Update Nilai Support.\n");
+                printf("Nilai support default: 0.5 \n");
+                printf("Nilai support saat ini: %.1f \n", support);
+                printf("----------------------------------------------\n");
+                printf("Nilai support baru (ex. 0.5): ");
+                scanf("%f", &support);
+                if (support > 1){
+                    support = support/10;
                 }
-                printf("Support: %.2f \n", calculateSupport(firstTransaction, itemCombination));
-                printf("------ \n");
-                printf("Confidence: %.2f \n", calculateConfidence(firstTransaction, itemCombination));
-                system("pause");
-                break;
-                for (int j = 0; j < i; j++) {
-                    free(itemCombination[j]);
-                }
+                updateTrie(&root, listofItem, firstTransaction, support);
                 break;
             }
             case 6:{
                 system("CLS");
                 menuHeader();
-                // getItemCombination(root);
                 printAllItemCombination(root);
                 system("pause");
                 break;
             }
-            case 7:{
-                system("CLS");
-                float support;
-                printf("Input support threshold: \n");
-                scanf("%f", &support);  // Use %f to read a float value
-                support = support / 10; // Divide by 10 if needed
-                printf("Support threshold after division: %f\n", support);  // Print the support threshold
-                updateTrie(&root, listofItem, firstTransaction, support);
-                break;
-            }
+            // case 7:{ //redundant
+            //     system("CLS");
+            //     float support;
+            //     printf("Input support threshold: \n");
+            //     scanf("%f", &support);  // Use %f to read a float value
+            //     support = support / 10; // Divide by 10 if needed
+            //     printf("Support threshold after division: %f\n", support);  // Print the support threshold
+            //     updateTrie(&root, listofItem, firstTransaction, support);
+            //     break;
+            // }
             case 8:{
                 system("CLS");
+                float confidence;
+                printf("Input confidence threshold (ex. 0.5): ");
+                scanf("%f", &confidence);
+                if (confidence > 1){
+                    confidence = confidence/10;
+                }
+                generateAssociationRules(root, firstTransaction, confidence);
+
                 // Define confidence thresholds
                 const float confidenceThresholds[] = {2.0, 5.0, 10.0};
                 int numThresholds = sizeof(confidenceThresholds) / sizeof(float);
