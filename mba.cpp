@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/stat.h>
+#include <direct.h>
+#include <time.h>
 #include "mba.h"
 #include "linkedlist.h"
 #include "apriori.h"
@@ -385,4 +388,80 @@ void searchItemsInTrie(Trie *root, char *items[], int itemCount) {
             printf("Sorry, we can't find it: %s\n", items[i]);
         }
     }
+}
+
+// Function to check if a directory exists
+bool directoryExists(const char *path) {
+    struct stat info;
+    if (stat(path, &info) != 0) {
+        return false;
+    }
+    return (info.st_mode & S_IFDIR) != 0;
+}
+
+// Function to create the "result" directory if it doesn't exist
+void createResultDirectory() {
+    const char *path = "result";
+    if (!directoryExists(path)) {
+        #ifdef _WIN32
+            mkdir(path);
+        #else
+            mkdir(path, 0755); // UNIX/Linux
+        #endif
+    }
+}
+
+// Function to generate a unique filename based on the current date
+char *generateFilename() {
+    time_t now = time(NULL);
+    struct tm *t = localtime(&now);
+    char *filename = (char *)malloc(20 * sizeof(char));
+    if (filename == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    strftime(filename, 20, "%d-%m-%Y", t);
+    return filename;
+}
+
+// Function to write association rules to a file
+void writeAssociationRulesToFile(const float *confidenceThresholds, int numThresholds, const char *filename) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        printf("Failed to create file: %s\n", filename);
+        return;
+    }
+
+    // Write header
+    fprintf(file, "====================\n");
+    fprintf(file, "Generate Association Rules\n");
+    fprintf(file, "Result\n");
+    fprintf(file, "====================\n");
+
+    // Write association rules for each confidence threshold
+    for (int i = 0; i < numThresholds; i++) {
+        fprintf(file, "\nConfidence: %.1f\n", confidenceThresholds[i]);
+        // Write association rules for this confidence threshold
+        // (You need to implement this part based on your logic)
+    }
+
+    fprintf(file, "\nNotes:\n");
+    fprintf(file, "- ...\n");
+
+    fclose(file);
+}
+
+// Function to generate and save association rules to a file
+void generateAndSaveAssociationRules(Trie *root, transactionsNode *transactions, const float *confidenceThresholds, int numThresholds) {
+    createResultDirectory();
+    char *filename = generateFilename();
+
+    char filepath[50];
+    snprintf(filepath, sizeof(filepath), "result/%s.txt", filename);
+
+    writeAssociationRulesToFile(confidenceThresholds, numThresholds, filepath);
+
+    printf("Association rules saved to: %s\n", filepath);
+
+    free(filename);
 }

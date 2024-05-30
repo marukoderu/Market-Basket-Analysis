@@ -44,4 +44,11 @@ void getItemComb(Trie *firstItem, Trie *secondItem, char *itemCombination[]);
 void generateAssociationRules(Trie *root, transactionsNode *transactions, float confidence);
 
 void searchItemsInTrie(Trie *root, char *items[], int itemCount);
+
+// Function to generate and save association rules to a file
+void generateAndSaveAssociationRules(Trie *root, transactionsNode *transactions, const float *confidenceThresholds, int numThresholds);
+
+// Update the function declaration
+void writeAssociationRulesToFile(const float *confidenceThresholds, int numThresholds, const char *filename);
+
 #endif /* MBA_H */

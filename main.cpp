@@ -166,13 +166,15 @@ int main() {
             }
             case 8:{
                 system("CLS");
-                float confidence;
-                printf("Input confidence threshold: ");
-                scanf("%f", &confidence);
-                confidence = confidence / 10;
-                printf("Confidence is %.1f \n", confidence);
-                generateAssociationRules(root, firstTransaction, confidence);
+                // Define confidence thresholds
+                const float confidenceThresholds[] = {2.0, 5.0, 10.0};
+                int numThresholds = sizeof(confidenceThresholds) / sizeof(float);
+
+                // Generate and save association rules for each confidence threshold
+                generateAndSaveAssociationRules(root, firstTransaction, confidenceThresholds, numThresholds);
+
                 system("pause");
+                break;
             }
             case 0:{
                 printf("Terima kasih....");
