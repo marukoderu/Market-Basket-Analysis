@@ -35,8 +35,7 @@ int main() {
         printf("| 4 | Lihat Data Transaksi \n");
         printf("| 5 | Update Nilai Support \n");
         printf("| 6 | Kombinasi Item dari Trie \n");
-        printf("| 7 | Update Trie (redundant) \n");
-        printf("| 8 | Generate Association Rules \n");
+        printf("| 7 | Generate Association Rules \n");
         printf("| 0 | Exit Program\n");
         printf(">   Silahkan pilih option menu (masukkan angka nya) : ");
         scanf("%d", &option);
@@ -78,6 +77,7 @@ int main() {
                 system("CLS");
                 menuHeader();
                 printf("Data Transaksi (Trie):\n");
+                printf("Support = %.1f \n", support);
                 printf("----------------------------------------------\n");
                 printTrieFormatted(root);
                 printf("----------------------------------------------\n");
@@ -154,7 +154,7 @@ int main() {
             //     updateTrie(&root, listofItem, firstTransaction, support);
             //     break;
             // }
-            case 8:{
+            case 7:{
                 system("CLS");
                 float confidence;
                 printf("Input confidence threshold (ex. 0.5): ");
