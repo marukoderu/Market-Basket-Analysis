@@ -1,0 +1,13 @@
+====================
+Generate Association Rules
+Result
+====================
+
+Confidence: 2.0
+
+Confidence: 5.0
+
+Confidence: 10.0
+
+Notes:
+- ...

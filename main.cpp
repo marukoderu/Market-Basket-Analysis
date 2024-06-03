@@ -156,6 +156,7 @@ int main() {
             // }
             case 7:{
                 system("CLS");
+                menuHeader();
                 float confidence;
                 printf("Input confidence threshold (ex. 0.5): ");
                 scanf("%f", &confidence);

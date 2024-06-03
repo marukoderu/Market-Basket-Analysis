@@ -21,6 +21,7 @@ Trie *createTrieNode(const char *namaItem) {
     newNode->fc = NULL;
     newNode->nb = NULL;
     newNode->pr = NULL;
+    newNode->support = 0;
     return newNode;
 }
 
@@ -81,6 +82,7 @@ void printTrieFormatted(Trie *node, int level) {
 
     // Cetak nama item pada node saat ini
     printf(" %s ", node->namaItem);
+    printf(" (%.0f%%) ", node->support * 100);
     printf("\n");
 
     // Rekursif untuk mencetak anak-anak dari node saat ini
@@ -201,12 +203,107 @@ void generateFirstLevelItems(Trie **root, itemsetNode *uniqueItems, transactions
     }
 }
 
+// Masukkan nilai support ke item dalam trie
+void addSupporttoItem(transactionsNode *transaction, Trie *root){
+    if (root == NULL) return;
+
+    Trie *currentNode = root;
+    int i;
+    char *itemCombination[20];
+    itemCombination[1] = NULL;
+
+    // tambahkan support untuk level pertama
+    while (currentNode != NULL){
+        itemCombination[0] = (char*) malloc(strlen(currentNode->namaItem)+1);
+        // printf("adding support \n");
+        strcpy(itemCombination[0], currentNode->namaItem);
+        // printf("adding support for %s", itemCombination[0]);
+        currentNode->support = calculateSupport(transaction, itemCombination);
+        // printf("Support added \n");
+        // printf("support = %.1f", currentNode->support);
+        currentNode = currentNode->nb;
+    }
+for (int j = 0; j < 1; j++) {
+            free(itemCombination[j]);
+            itemCombination[j] = NULL; // Reset pointer to NULL
+        }
+
+    i = 0;
+
+    // Trie *branch = root;
+    // while (branch != NULL){
+        currentNode = root; 
+        while (currentNode != NULL) {
+            printf("adding support \n");
+            itemCombination[i] = (char*) malloc(strlen(currentNode->namaItem) + 1);
+            strcpy(itemCombination[i++], currentNode->namaItem);
+            printf("adding support for %s \n", itemCombination[i-1]);
+
+            if (currentNode->fc != NULL){
+                currentNode = currentNode->fc;
+            } else break;
+        }
+        itemCombination[i] = NULL;
+        for (i = 0; itemCombination[i]!=NULL; i++){
+            printf("%s ", itemCombination[i]);
+        }
+        currentNode->support = calculateSupport(transaction, itemCombination);
+    //     branch = branch->nb;
+    // }
+    // currentNode->support = calculateSupport(transaction, currentNode->namaItem)
+}
+
+// Fungsi untuk update Trie sesuai dengan item yang memiliki nilai support yang melebihi threshold
+void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support){
+    Trie *currentNode, *firstNode, *secondNode;
+    char *itemCombination[20];
+
+    deallocateTrie(*root);
+    (*root) = createTrieNode("*");
+    generateFirstLevelItems(root, uniqueItems, transactions, support);
+    addSupporttoItem(transactions, (*root)->fc);
+    currentNode = (*root)->fc;
+     while (currentNode != NULL) {
+        firstNode = currentNode;
+        secondNode = firstNode->nb;
+
+        while (secondNode != NULL){
+            getItemComb(firstNode, secondNode, itemCombination);
+            
+            bool isPassedSupportThreshold = compareSupport(transactions, support, itemCombination);
+            float itemSupport = calculateSupport(transactions, itemCombination);
+
+            if (isPassedSupportThreshold) {
+                Trie *parent = searchItem(*root, itemCombination[0]);
+                for (int i = 0; itemCombination[i] != NULL; i++) {
+                    if (parent->fc != NULL){
+                    parent = parent->fc;
+                    }
+                    if (itemCombination[i+1] != NULL) {
+                        // Add the next item to the Trie under the current parent
+                        addSingleItemtoTrie(parent, itemCombination[i+1], itemSupport);
+                    }
+                }
+            }
+
+            addSupporttoItem(transactions, currentNode);
+            secondNode = secondNode->nb;
+        }
+        addSupporttoItem(transactions, currentNode);
+        currentNode = currentNode->nb;
+    }
+}
+
 // Fungsi untuk menambahkan sebuah item ke Trie
 void addSingleItemtoTrie(Trie *parent, char item[], float support) {
     Trie *newNode, *currentNode;
 
     // Create new Trie node
     newNode = createTrieNode(item);
+
+    // Hitung Support
+    
+
     if (newNode == NULL) {
         // Handle memory allocation failure
         printf("Error: Memory allocation failed\n");
@@ -236,46 +333,6 @@ void addSingleItemtoTrie(Trie *parent, char item[], float support) {
         currentNode->nb = newNode;
     }
     newNode->pr = parent; // Set parent node for newNode
-}
-
-// Fungsi untuk update Trie sesuai dengan item yang memiliki nilai support yang melebihi threshold
-void updateTrie(Trie **root, itemsetNode *uniqueItems, transactionsNode *transactions, float support){
-    Trie *currentNode, *firstNode, *secondNode;
-    char *itemCombination[20];
-
-    deallocateTrie(*root);
-    (*root) = createTrieNode("*");
-    generateFirstLevelItems(root, uniqueItems, transactions, support);
-    
-    currentNode = (*root)->fc;
-     while (currentNode != NULL) {
-        firstNode = currentNode;
-        secondNode = firstNode->nb;
-
-        while (secondNode != NULL){
-            getItemComb(firstNode, secondNode, itemCombination);
-            
-            bool isPassedSupportThreshold = compareSupport(transactions, support, itemCombination);
-            float itemSupport = calculateSupport(transactions, itemCombination);
-
-            if (isPassedSupportThreshold) {
-                Trie *parent = searchItem(*root, itemCombination[0]);
-                for (int i = 0; itemCombination[i] != NULL; i++) {
-                    if (parent->fc != NULL){
-                    parent = parent->fc;
-                    }
-                    if (itemCombination[i+1] != NULL) {
-                        // Add the next item to the Trie under the current parent
-                        addSingleItemtoTrie(parent, itemCombination[i+1], itemSupport);
-                    }
-                }
-            }
-
-            secondNode = secondNode->nb;
-        }
-
-        currentNode = currentNode->nb;
-    }
 }
 
 void deallocateTrie(Trie* root) {

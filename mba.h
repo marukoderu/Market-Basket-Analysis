@@ -7,7 +7,11 @@
 typedef struct TrieNode {
     char namaItem[20];
     struct TrieNode *fc, *nb, *pr;
+    float support;
 } Trie;
+
+// Fungsi untuk menambahkan support ke trie
+void addSupporttoItem(transactionsNode *transaction, Trie *root);
 
 // Membuat Node Trie Baru
 Trie *createTrieNode(const char *namaItem);
